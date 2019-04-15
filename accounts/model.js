@@ -17,11 +17,24 @@ function findByID(id) {
     .first();
 }
 
-async function insert(user) {
-  const shouldBeID = await db("accounts").insert(user);
-  console.log("ID: ", shouldBeID);
-  const { username, avatar } = await findByID(id);
-  return { id, username, avatar };
+function insert(user) {
+  return db("accounts")
+    .insert(user)
+    .then(res =>
+      findByID(res[0])
+        .then(data => {
+          console.log("GOOD PROMISE: ", res, data);
+          return {
+            id: data.id,
+            username: data.username,
+            avatar: data.avatar
+          };
+        })
+        .catch(err => console.log("2nd Promise: ", err))
+    );
+
+  //const { username, avatar } =findByID(id);
+  //return { id, username, avatar };
 }
 
 function getAccounts() {
