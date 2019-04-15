@@ -19,6 +19,7 @@ router.post(
         const token = await _getLoginToken(newAccount.username);
         res.status(201).json({ ...newAccount, token });
       } catch (err) {
+        console.log(err);
         res
           .status(500)
           .json({ message: "Internal server error: registering account" });
