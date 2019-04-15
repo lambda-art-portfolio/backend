@@ -12,6 +12,7 @@ server.use(helmet());
 server.use(cors());
 
 // setup routes
+server.use("/api/accounts", accountRoutes);
 
 server.get("/", (req, res) => {
   res.status(200).json({ serverStatus: "OK" });
