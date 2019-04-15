@@ -21,7 +21,7 @@ async function insert(user) {
   const newAcc = await db("accounts").insert(user);
   const fullNewAcc = await findByID(newAcc[0]);
   return {
-    id: newAcc.id,
+    id: newAcc[0],
     username: fullNewAcc.username,
     avatar: fullNewAcc.avatar
   };
