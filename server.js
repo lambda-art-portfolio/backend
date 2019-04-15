@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 
 // import routes
+const accountRoutes = require("./accounts/");
 
 const server = express();
 
