@@ -16,7 +16,12 @@ router.post(
         creditials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
 
         const newAccount = await Accounts.insert(creditials);
-        res.status(201).json(newAccount);
+        if (newAccount) {
+          const token = _getLoginToken(newAccount.username);
+          res.status(201).json({ ...newAccount, token });
+        } else {
+          throw "Error retrieving new account";
+        }
       } catch (err) {
         console.log(err);
         res
@@ -36,7 +41,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
   const account = await Accounts.findBy({ username }).first();
   if (bcrypt.hashCompare(creditials.password, account.password)) {
     const token = _getLoginToken(account.username);
-    res.status(200).json({ token, username: account.username, id: account.id });
+    res.status(200).json({ token });
   } else {
     console.log("Bad login");
     res.status(400).json({ message: "Invalid creditials" });
