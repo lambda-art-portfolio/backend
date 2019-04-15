@@ -4,15 +4,6 @@ const bcrypt = require("bcryptjs");
 const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
-router.get("/", async (req, res) => {
-  try {
-    const accounts = await Accounts.getAccounts();
-    res.status(200).json(accounts);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error getting accounts" });
-  }
-});
 router.post(
   "/register",
   async ({ body: { username, password, avatar } }, res) => {
