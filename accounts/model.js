@@ -19,7 +19,9 @@ function findByID(id) {
 
 async function insert(user) {
   await db("accounts").insert(user);
-  const { username, avatar, id } = await findBy({ username: user.username });
+  const { username, avatar, id } = await findBy({
+    username: user.username
+  }).first();
   return { id, username, avatar };
 }
 
