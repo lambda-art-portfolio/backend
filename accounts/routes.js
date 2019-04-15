@@ -5,8 +5,13 @@ const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
 router.get("/", async () => {
-  const res = await Accounts.getAllAccounts();
-  res.status(200).json({ res });
+  try {
+    const res = await Accounts.getAllAccounts();
+    res.status(200).json({ res });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error getting accounts" });
+  }
 });
 router.post(
   "/register",
