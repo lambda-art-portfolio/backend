@@ -24,6 +24,6 @@ function remove(id) {
 }
 
 async function insert(post) {
-  await db("accounts").insert(post);
-  //const getBy({})
+  const [id] = await db("accounts").insert(post, "id");
+  return getBy({ id }).first();
 }
