@@ -16,14 +16,9 @@ router.post(
         creditials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
 
         const newAccount = await Accounts.insert(creditials);
-        if (newAccount) {
-          const token = _getLoginToken(newAccount.username);
-          res.status(201).json({ ...newAccount, token });
-        } else {
-          throw "Error retrieving new account";
-        }
+        const token = await _getLoginToken(newAccount.username);
+        res.status(201).json({ ...newAccount, token });
       } catch (err) {
-        console.log(err);
         res
           .status(500)
           .json({ message: "Internal server error: registering account" });
@@ -36,8 +31,6 @@ router.post(
 );
 
 router.post("/login", async ({ body: { username, password } }, res) => {
-  const { username } = creditials;
-
   const account = await Accounts.findBy({ username }).first();
   if (bcrypt.hashCompare(creditials.password, account.password)) {
     const token = _getLoginToken(account.username);
@@ -56,9 +49,13 @@ router.post("/login", async ({ body: { username, password } }, res) => {
   const token = generateToken({ username, id }, "1d");
 });
 
-module.exports = router;
-
 async function _getLoginToken(username) {
-  const { id } = await Accounts.findBy({ username }).first();
-  return generateToken({ username, id }, "1d");
+  try {
+    const { id } = await Accounts.findBy({ username }).first();
+    return generateToken({ username, id }, "1d");
+  } catch (err) {
+    console.log(err);
+  }
 }
+
+module.exports = router;
