@@ -44,8 +44,6 @@ router.post("/login", async ({ body: { username, password } }, res) => {
     console.log(err);
     res.status(500).json({ message: "Internal server error: logging in" });
   }
-
-  const token = generateToken(username);
 });
 
 async function _getLoginToken(username) {
