@@ -30,11 +30,17 @@ router.post(
   }
 );
 
-router.post("/login", async({ body: { username, password } }, res));
-module.exports = router;
+router.post("/login", async ({ body: { username, password } }, res) => {
+  const { username } = creditials;
 
-function _logUserIn(creditials) {
-  const { username, id } = creditials;
+  const account = await Accounts.findBy({ username }).first();
+  if (bcrypt.hashCompare(creditials.password, account.password)) {
+    const token = _getLoginToken(account.username);
+    res.status(200).json({ token, username: account.username, id: account.id });
+  } else {
+    console.log("Bad login");
+    res.status(400).json({ message: "Invalid creditials" });
+  }
 
   try {
   } catch (err) {
@@ -43,4 +49,11 @@ function _logUserIn(creditials) {
   }
 
   const token = generateToken({ username, id }, "1d");
+});
+
+module.exports = router;
+
+async function _getLoginToken(username) {
+  const { id } = await Accounts.findBy({ username }).first();
+  return generateToken({ username, id }, "1d");
 }
