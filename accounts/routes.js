@@ -31,22 +31,21 @@ router.post(
 );
 
 router.post("/login", async ({ body: { username, password } }, res) => {
-  const account = await Accounts.findBy({ username }).first();
-  if (bcrypt.hashCompare(creditials.password, account.password)) {
-    const token = _getLoginToken(account.username);
-    res.status(200).json({ token });
-  } else {
-    console.log("Bad login");
-    res.status(400).json({ message: "Invalid creditials" });
-  }
-
   try {
+    const account = await Accounts.findBy({ username }).first();
+    if (account && bcrypt.compareSync(password, account.password)) {
+      const token = await _getLoginToken(account.username);
+      res.status(200).json({ token });
+    } else {
+      console.log("Bad login");
+      res.status(400).json({ message: "Invalid creditials" });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error: logging in" });
   }
 
-  const token = generateToken({ username, id }, "1d");
+  const token = generateToken(username);
 });
 
 async function _getLoginToken(username) {
