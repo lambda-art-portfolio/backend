@@ -4,7 +4,7 @@ module.exports = {
   findBy,
   findByID,
   insert,
-  getAllAccounts
+  getAccounts
 };
 
 function findBy(filter) {
@@ -24,6 +24,6 @@ async function insert(user) {
   return { id, username, avatar };
 }
 
-function getAllAccounts() {
-  return db("accounts");
+function getAccounts() {
+  return db.select().from("accounts");
 }

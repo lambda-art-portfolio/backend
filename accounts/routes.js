@@ -4,10 +4,10 @@ const bcrypt = require("bcryptjs");
 const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
-router.get("/", async () => {
+router.get("/", async (req, res) => {
   try {
-    const res = await Accounts.getAllAccounts();
-    res.status(200).json({ res });
+    const accounts = await Accounts.getAccounts();
+    res.status(200).json(accounts);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Error getting accounts" });
