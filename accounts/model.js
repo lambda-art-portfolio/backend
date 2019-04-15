@@ -3,7 +3,8 @@ const db = require("../data/dbConfig.js");
 module.exports = {
   findBy,
   findByID,
-  insert
+  insert,
+  getAllAccounts
 };
 
 function findBy(filter) {
@@ -21,4 +22,8 @@ async function insert(user) {
   const [id] = await db("accounts").insert(user);
   const { username, avatar } = await findByID(id);
   return { id, username, avatar };
+}
+
+function getAllAccounts() {
+  return db("accounts");
 }

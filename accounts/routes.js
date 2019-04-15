@@ -4,6 +4,10 @@ const bcrypt = require("bcryptjs");
 const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
+router.get("/", async () => {
+  const res = await Accounts.getAllAccounts();
+  res.status(200).json({ res });
+});
 router.post(
   "/register",
   async ({ body: { username, password, avatar } }, res) => {
