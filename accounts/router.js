@@ -5,6 +5,7 @@ const restrict = require("../auth/restrict.js");
 const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
+// Debugging endpoint, delete for final product
 router.get("/", async (req, res) => {
   try {
     const accounts = await Accounts.getAccounts();
@@ -48,16 +49,21 @@ router.post(
   async ({ body: { username, password, avatar } }, res) => {
     if (username && password) {
       try {
-        //const checkForExisting = Accounts.findBy({username});
-        const creditials = {
-          username,
-          password: bcrypt.hashSync(password, 12)
-        };
-        creditials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
+        const foundExisting = await Accounts.findBy({ username });
+        if (foundExisting.length) {
+          console.log("Duplicate account creation attempt");
+          res.status(409).json({ message: "Account already exists" });
+        } else {
+          const creditials = {
+            username,
+            password: bcrypt.hashSync(password, 12)
+          };
+          creditials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
 
-        const newAccount = await Accounts.insert(creditials);
-        const token = await _getLoginToken(newAccount.username);
-        res.status(201).json({ ...newAccount, token });
+          const newAccount = await Accounts.insert(creditials);
+          const token = await _getLoginToken(newAccount.username);
+          res.status(201).json({ ...newAccount, token });
+        }
       } catch (err) {
         console.log(err);
         res
@@ -77,7 +83,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
       const account = await Accounts.findBy({ username }).first();
       if (account && bcrypt.compareSync(password, account.password)) {
         const token = await _getLoginToken(account.username);
-        res.status(200).json({ token });
+        res.status(200).json({ ...account, token });
       } else {
         console.log("Bad login");
         res.status(400).json({ message: "Invalid creditials" });

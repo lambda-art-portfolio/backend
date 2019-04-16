@@ -9,12 +9,16 @@ module.exports = {
 };
 
 function getBy(filter) {
-  return db("posts").where(filter);
+  return db
+    .select("u.username", "p.id", "p.picture", "p.description", "p.upvotes")
+    .from("posts as p")
+    .where(filter)
+    .join("accounts as u", { "u.id": "p.user_id" });
 }
 
 function getAll() {
   return db
-    .select("u.username", "p.picture", "p.description", "p.upvotes")
+    .select("u.username", "p.picture", "p.id", "p.description", "p.upvotes")
     .from("posts as p")
     .join("accounts as u", { "u.id": "p.user_id" });
 }

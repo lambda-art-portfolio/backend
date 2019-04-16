@@ -49,7 +49,6 @@ router.put(
       if (description) updatedObj.description = description;
       if (upvotes) updatedObj.upvotes = upvotes;
       try {
-        console.log(pid, picture, description, upvotes);
         const updated = await Posts.update(pid, updatedObj);
         updated
           ? res.status(200).json(updated)
