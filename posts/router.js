@@ -80,19 +80,19 @@ router.delete("/:pid", async ({ params: { pid } }, res) => {
   }
 });
 
-router.put("/upvote", async ({ body: { id } }, res) => {
-  try {
-    const post = await Posts.getBy({ id }).first();
-    const updated = { upvotes: post.upvotes + 1 };
-    const updatedPost = await Posts.update(id, updated);
-
-    res.status(200).end(updatedPost);
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .json({ message: "Internal server error: incrementing upvotes" });
-  }
-});
+// router.put("/upvote", async ({ body: { id } }, res) => {
+//   try {
+//     const post = await Posts.getBy({ id }).first();
+//     const updated = { upvotes: post.upvotes + 1 };
+//     const updatedPost = await Posts.update(id, updated);
+//
+//     res.status(200).end(updatedPost);
+//   } catch (err) {
+//     console.log(err);
+//     res
+//       .status(500)
+//       .json({ message: "Internal server error: incrementing upvotes" });
+//   }
+// });
 
 module.exports = router;
