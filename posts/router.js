@@ -40,7 +40,7 @@ router.post(
 );
 
 router.put(
-  "/:pid",
+  "/edit/:pid",
   restrict,
   async ({ params: { pid }, body: { picture, description, upvotes } }, res) => {
     const updatedObj = { id: pid };
