@@ -4,6 +4,7 @@ module.exports = {
   findBy,
   findByID,
   insert,
+  update,
   getAccounts
 };
 
@@ -23,6 +24,12 @@ async function insert(user) {
   return { id, username, avatar };
 }
 
+function update(id, updated) {
+  return db("accounts")
+    .where({ id })
+    .update({ ...updated });
+}
+
 function getAccounts() {
-  return db.select().from("accounts");
+  return db.select("id", "username", "avatar").from("accounts");
 }

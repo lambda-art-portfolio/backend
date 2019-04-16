@@ -11,10 +11,10 @@ function getBy(filter) {
   return db("posts").where(filter);
 }
 
-function update(id, newInfo) {
+function update(id, updated) {
   return db("posts")
     .where({ id })
-    .update({ ...newInfo });
+    .update({ ...updated });
 }
 
 function remove(id) {
@@ -24,6 +24,6 @@ function remove(id) {
 }
 
 async function insert(post) {
-  const [id] = await db("accounts").insert(post, "id");
+  const [id] = await db("posts").insert(post, "id");
   return getBy({ id }).first();
 }
