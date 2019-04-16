@@ -24,11 +24,11 @@ exports.up = function(knex) {
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
 
-      tbl.string("picture", 128).notNullable();
+      tbl.string("picture", 500).notNullable();
 
-      tbl.string("description", 128);
+      tbl.string("description", 500);
 
-      tbl.integer("upvotes", 128).notNullable();
+      tbl.integer("upvotes", 1000).notNullable();
     });
 };
 
