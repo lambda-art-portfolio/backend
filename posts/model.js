@@ -19,10 +19,12 @@ function getAll() {
     .join("accounts as u", { "u.id": "p.user_id" });
 }
 
-function update(id, updated) {
-  return db("posts")
+async function update(id, updated) {
+  await db("posts")
     .where({ id })
     .update({ ...updated });
+
+  return getBy({ id });
 }
 
 function remove(id) {

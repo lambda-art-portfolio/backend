@@ -2,7 +2,7 @@ const router = require("express").Router();
 const restrict = require("../auth/restrict.js");
 const Posts = require("./model.js");
 
-router.get("/", restrict, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const allPosts = await Posts.getAll();
     res.status(200).json(allPosts);
@@ -39,6 +39,32 @@ router.post(
   }
 );
 
-router.put("/:id", (req, res) => {});
+router.put(
+  "/:pid",
+  restrict,
+  async ({ params: { pid }, body: { picture, description, upvotes } }, res) => {
+    const updatedObj = { id: pid };
+    if (picture || description || upvotes) {
+      if (picture) updatedObj.picture = picture;
+      if (description) updatedObj.description = description;
+      if (upvotes) updatedObj.upvotes = upvotes;
+      try {
+        console.log(pid, picture, description, upvotes);
+        const updated = await Posts.update(pid, updatedObj);
+        res.status(200).json(updated);
+      } catch (err) {
+        console.log(err);
+        res
+          .status(500)
+          .json({ message: "Internal server error: updating post" });
+      }
+    } else {
+      console.log("Updating post w/o info");
+      res.status(400).json({
+        message: "Updating a post requires a picture, description, or upvotes"
+      });
+    }
+  }
+);
 
 module.exports = router;
