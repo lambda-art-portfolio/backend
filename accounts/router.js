@@ -83,6 +83,7 @@ router.post("/login", async ({ body: { username, password } }, res) => {
       const account = await Accounts.findBy({ username }).first();
       if (account && bcrypt.compareSync(password, account.password)) {
         const token = await _getLoginToken(account.username);
+        delete account.password;
         res.status(200).json({ ...account, token });
       } else {
         console.log("Bad login");
