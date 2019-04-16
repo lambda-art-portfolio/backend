@@ -7,6 +7,12 @@ exports.seed = function(knex) {
       username: "Foo",
       password: bcrypt.hashSync("Bar", 12),
       avatar: "https://bit.ly/2GnNwi1"
+    },
+    {
+      id: 2,
+      username: "artfolio",
+      password: bcrypt.hashSync("password", 12),
+      avatar: "https://bit.ly/2GnNwi1"
     }
   ]);
 };
