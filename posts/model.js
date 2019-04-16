@@ -1,11 +1,11 @@
-const db = require("../dbConfig.js");
-const restrict = require("../auth/restrict.js");
+const db = require("../data/dbConfig.js");
 
 module.exports = {
   getBy,
   getAll,
   update,
-  remove
+  remove,
+  insert
 };
 
 function getBy(filter) {
@@ -13,7 +13,10 @@ function getBy(filter) {
 }
 
 function getAll() {
-  return db("posts");
+  return db
+    .select("u.username", "p.picture", "p.description", "p.upvotes")
+    .from("posts as p")
+    .join("accounts as u", { "u.id": "p.user_id" });
 }
 
 function update(id, updated) {
