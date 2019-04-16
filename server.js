@@ -3,7 +3,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 
 // import routes
-const accountRoutes = require("./accounts/routes.js");
+const accountRouter = require("./accounts/router.js");
 
 const server = express();
 
@@ -12,7 +12,7 @@ server.use(helmet());
 server.use(cors());
 
 // setup routes
-server.use("/api/account", accountRoutes);
+server.use("/api/account", accountRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({ serverStatus: "OK" });

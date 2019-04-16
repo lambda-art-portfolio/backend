@@ -15,30 +15,40 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/", restrict, async ({ decoded: { id, username }, body }, res) => {
-  delete body.token;
-  console.log(body);
-  if (Object.keys(body).length) {
-    try {
-      const updated = await Accounts.update(id, body);
-      res.status(200).json(updated);
-    } catch (err) {
-      console.log(err);
-      res
-        .status(500)
-        .json({ message: "Internal server error: updating account" });
+router.put(
+  "/",
+  restrict,
+  async (
+    { decoded: { id, accUsername }, body: { username, password, avatar } },
+    res
+  ) => {
+    if (username || password || avatar) {
+      const updateAcc = {};
+      if (username) updateAcc.username = username;
+      if (password) updateAcc.password = bcrypt.hashSync(password, 12);
+      if (avatar) updateAcc.avatar = avatar;
+      try {
+        const updated = await Accounts.update(id, updateAcc);
+        res.status(200).json(updated);
+      } catch (err) {
+        console.log(err);
+        res
+          .status(500)
+          .json({ message: "Internal server error: updating account" });
+      }
+    } else {
+      console.log("Update w/ no data");
+      res.status(400).json({ message: "Please include data to update" });
     }
-  } else {
-    console.log("Update w/ no data");
-    res.status(400).json({ message: "Please include data to update" });
   }
-});
+);
 
 router.post(
   "/register",
   async ({ body: { username, password, avatar } }, res) => {
     if (username && password) {
       try {
+        //const checkForExisting = Accounts.findBy({username});
         const creditials = {
           username,
           password: bcrypt.hashSync(password, 12)

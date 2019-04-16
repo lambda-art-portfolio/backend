@@ -3,12 +3,17 @@ const restrict = require("../auth/restrict.js");
 
 module.exports = {
   getBy,
+  getAll,
   update,
   remove
 };
 
 function getBy(filter) {
   return db("posts").where(filter);
+}
+
+function getAll() {
+  return db("posts");
 }
 
 function update(id, updated) {
