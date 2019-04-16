@@ -86,7 +86,7 @@ router.put("/upvote", async ({ body: { id } }, res) => {
     const updated = { upvotes: post.upvotes + 1 };
     const updatedPost = await Posts.update(id, updated);
 
-    res.status(200).end(updatedPost);
+    res.status(200).json(updatedPost);
   } catch (err) {
     console.log(err);
     res
