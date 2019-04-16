@@ -26,7 +26,8 @@ function getAll() {
 async function update(id, updated) {
   await db("posts")
     .where({ id })
-    .update({ ...updated });
+    .update({ ...updated })
+    .first();
 
   return getBy({ id });
 }
