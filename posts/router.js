@@ -51,7 +51,9 @@ router.put(
       try {
         console.log(pid, picture, description, upvotes);
         const updated = await Posts.update(pid, updatedObj);
-        res.status(200).json(updated);
+        updated
+          ? res.status(200).json(updated)
+          : res.status(500).json({ message: "Post not updated" });
       } catch (err) {
         console.log(err);
         res
@@ -66,5 +68,17 @@ router.put(
     }
   }
 );
+
+router.delete("/:pid", async ({ params: { pid } }, res) => {
+  try {
+    const deleted = await Posts.remove(pid);
+    deleted
+      ? res.status(204).end()
+      : res.status(500).json({ message: "Post not deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error: deleting post" });
+  }
+});
 
 module.exports = router;
