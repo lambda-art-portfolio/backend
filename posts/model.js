@@ -24,12 +24,12 @@ function getAll() {
 }
 
 async function update(id, updated) {
-  await db("posts")
-    .where({ id })
+  await db("posts as p")
+    .where({ "p.id": id })
     .update({ ...updated })
     .first();
 
-  return getBy({ id });
+  return getBy({ "p.id": id });
 }
 
 function remove(id) {
