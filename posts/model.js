@@ -9,10 +9,14 @@ module.exports = {
 };
 
 function getBy(filter) {
+  const postFilter = {};
+  for (let key in filter) {
+    postFilter[`p.${key}`] = filter[key];
+  }
   return db
     .select("u.username", "p.id", "p.picture", "p.description", "p.upvotes")
     .from("posts as p")
-    .where(filter)
+    .where(postFilter)
     .join("accounts as u", { "u.id": "p.user_id" });
 }
 
@@ -24,12 +28,12 @@ function getAll() {
 }
 
 async function update(id, updated) {
-  await db("posts as p")
-    .where({ "p.id": id })
+  await db("posts")
+    .where({ id })
     .update({ ...updated })
     .first();
 
-  return getBy({ "p.id": id });
+  return getBy({ id });
 }
 
 function remove(id) {
