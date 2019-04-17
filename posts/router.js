@@ -17,10 +17,7 @@ router.get("/", async (req, res) => {
 router.post(
   "/add",
   restrict,
-  async (
-    { decoded: { username, id }, body: { picture, description } },
-    res
-  ) => {
+  async ({ decoded: { id }, body: { picture, description } }, res) => {
     if (picture) {
       try {
         const newPost = { picture, upvotes: 0 };

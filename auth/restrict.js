@@ -9,7 +9,6 @@ module.exports = (req, res, next) => {
         res.status(401).json({ message: "Invalid Credentials" });
       } else {
         req.decoded = decodedToken;
-        delete req.body.token;
         next();
       }
     });
