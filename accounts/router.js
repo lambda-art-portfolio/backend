@@ -5,43 +5,6 @@ const restrict = require("../auth/restrict.js");
 const Accounts = require("./model.js");
 const generateToken = require("../auth/generateToken.js");
 
-// Debugging endpoint, delete for final product
-router.get("/", async (req, res) => {
-  try {
-    const accounts = await Accounts.getAccounts();
-    res.status(200).json({ accounts });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error getting accounts" });
-  }
-});
-
-router.put(
-  "/edit/:id",
-  restrict,
-  async ({ params: { id }, body: { username, password, avatar } }, res) => {
-    if (username || password || avatar) {
-      const updateAcc = {};
-      if (username) updateAcc.username = username;
-      if (password) updateAcc.password = bcrypt.hashSync(password, 12);
-      if (avatar) updateAcc.avatar = avatar;
-      try {
-        const updated = await Accounts.update(id, updateAcc);
-        delete updated.password;
-        res.status(200).json(updated);
-      } catch (err) {
-        console.log(err);
-        res
-          .status(500)
-          .json({ message: "Internal server error: updating account" });
-      }
-    } else {
-      console.log("Update w/ no data");
-      res.status(400).json({ message: "Please include data to update" });
-    }
-  }
-);
-
 router.post(
   "/register",
   async ({ body: { username, password, avatar } }, res) => {
@@ -71,6 +34,32 @@ router.post(
     } else {
       console.log("Bad account creation");
       res.status(400).json({ message: "Please include username & password" });
+    }
+  }
+);
+
+router.put(
+  "/edit/:id",
+  restrict,
+  async ({ params: { id }, body: { username, password, avatar } }, res) => {
+    if (username || password || avatar) {
+      const updateAcc = {};
+      if (username) updateAcc.username = username;
+      if (password) updateAcc.password = bcrypt.hashSync(password, 12);
+      if (avatar) updateAcc.avatar = avatar;
+      try {
+        const updated = await Accounts.update(id, updateAcc);
+        delete updated.password;
+        res.status(200).json(updated);
+      } catch (err) {
+        console.log(err);
+        res
+          .status(500)
+          .json({ message: "Internal server error: updating account" });
+      }
+    } else {
+      console.log("Update w/ no data");
+      res.status(400).json({ message: "Please include data to update" });
     }
   }
 );

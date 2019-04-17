@@ -14,6 +14,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get;
+
 router.post(
   "/add",
   restrict,
@@ -35,6 +37,16 @@ router.post(
     }
   }
 );
+
+router.get("/post/:id", ({ params: { id } }, res) => {
+  try {
+    const post = Posts.getBy({ id });
+    res.status(200).json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error retrieving that post" });
+  }
+});
 
 router.put(
   "/edit/:pid",
@@ -89,6 +101,21 @@ router.put("/upvote", async ({ body: { id } }, res) => {
     res
       .status(500)
       .json({ message: "Internal server error: incrementing upvotes" });
+  }
+});
+
+router.put("/downvote", async ({ body: { id } }, res) => {
+  try {
+    const post = await Posts.getBy({ id }).first();
+    const updated = { upvotes: post.upvotes - 1 };
+    const updatedPost = await Posts.update(id, updated);
+
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ message: "Internal server error: decrementing upvotes" });
   }
 });
 

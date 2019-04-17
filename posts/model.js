@@ -14,7 +14,14 @@ function getBy(filter) {
     postFilter[`p.${key}`] = filter[key];
   }
   return db
-    .select("u.username", "p.id", "p.picture", "p.description", "p.upvotes")
+    .select(
+      "u.username",
+      "u.avatar",
+      "p.id",
+      "p.picture",
+      "p.description",
+      "p.upvotes"
+    )
     .from("posts as p")
     .where(postFilter)
     .join("accounts as u", { "u.id": "p.user_id" });
@@ -32,7 +39,7 @@ async function update(id, updated) {
     .where({ id })
     .update({ ...updated });
 
-  return getBy({ id });
+  return getBy({ id }).first();
 }
 
 function remove(id) {
