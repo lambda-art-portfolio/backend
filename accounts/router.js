@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 router.put(
   "/edit/:id",
   restrict,
-  async ({ params: { id } }, { body: { username, password, avatar } }, res) => {
+  async ({ params: { id }, body: { username, password, avatar } }, res) => {
     if (username || password || avatar) {
       const updateAcc = {};
       if (username) updateAcc.username = username;
