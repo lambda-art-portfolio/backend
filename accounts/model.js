@@ -29,7 +29,7 @@ async function update(id, updated) {
     .where({ id })
     .update({ ...updated });
 
-  return findById(id);
+  return findByID(id);
 }
 
 function getAccounts() {
