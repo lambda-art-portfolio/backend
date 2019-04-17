@@ -38,9 +38,9 @@ router.post(
   }
 );
 
-router.get("/post/:id", ({ params: { id } }, res) => {
+router.get("/post/:id", async ({ params: { id } }, res) => {
   try {
-    const post = Posts.getBy({ id });
+    const post = await Posts.getBy({ id });
     res.status(200).json(post);
   } catch (err) {
     console.log(err);
