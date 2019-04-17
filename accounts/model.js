@@ -24,10 +24,12 @@ async function insert(user) {
   return { id, username, avatar };
 }
 
-function update(id, updated) {
-  return db("accounts")
+async function update(id, updated) {
+  await db("accounts")
     .where({ id })
     .update({ ...updated });
+
+  return findById(id);
 }
 
 function getAccounts() {

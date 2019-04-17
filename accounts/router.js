@@ -27,6 +27,7 @@ router.put(
       if (avatar) updateAcc.avatar = avatar;
       try {
         const updated = await Accounts.update(id, updateAcc);
+        delete updated.password;
         res.status(200).json(updated);
       } catch (err) {
         console.log(err);
