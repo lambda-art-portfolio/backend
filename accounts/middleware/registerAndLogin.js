@@ -48,7 +48,9 @@ function prepNewAccount(req, res, next) {
   if (file) {
     credentials.avatar_img = file;
   } else {
-    credentials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
+    credentials.avatar = avatar
+      ? avatar
+      : "http://greenwings.co/wp-content/uploads/2018/09/blank-head-profile-pic-for-a-man.jpg";
   }
   req.credentials = { ...credentials };
   next();
