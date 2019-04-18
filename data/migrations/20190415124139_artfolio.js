@@ -10,7 +10,9 @@ exports.up = function(knex) {
 
       tbl.string("password", 128).notNullable();
 
-      tbl.string("avatar", 128);
+      tbl.string("avatar_str");
+
+      tbl.json("avatar_img");
     })
     .createTable("posts", tbl => {
       tbl.increments();
@@ -24,11 +26,11 @@ exports.up = function(knex) {
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
 
-      tbl.string("picture", 128).notNullable();
+      tbl.string("picture").notNullable();
 
-      tbl.string("description", 128);
+      tbl.string("description", 2000);
 
-      tbl.integer("upvotes", 128).notNullable();
+      tbl.integer("upvotes").notNullable();
     });
 };
 

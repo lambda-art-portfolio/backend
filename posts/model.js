@@ -5,14 +5,26 @@ module.exports = {
   getAll,
   update,
   remove,
-  insert
+  insert,
+  getPostsUserID
 };
 
 function getBy(filter) {
+  const postFilter = {};
+  for (let key in filter) {
+    postFilter[`p.${key}`] = filter[key];
+  }
   return db
-    .select("u.username", "p.id", "p.picture", "p.description", "p.upvotes")
+    .select(
+      "u.username",
+      "u.avatar",
+      "p.id",
+      "p.picture",
+      "p.description",
+      "p.upvotes"
+    )
     .from("posts as p")
-    .where(filter)
+    .where(postFilter)
     .join("accounts as u", { "u.id": "p.user_id" });
 }
 
@@ -28,7 +40,7 @@ async function update(id, updated) {
     .where({ id })
     .update({ ...updated });
 
-  return getBy({ id });
+  return getBy({ id }).first();
 }
 
 function remove(id) {
@@ -40,4 +52,12 @@ function remove(id) {
 async function insert(post) {
   const [id] = await db("posts").insert(post, "id");
   return getBy({ id }).first();
+}
+
+function getPostsUserID(pid) {
+  return db
+    .select("user_id as ownerID")
+    .from("posts")
+    .where({ id: pid })
+    .first();
 }
