@@ -48,7 +48,7 @@ function prepNewAccount(req, res, next) {
   if (file) {
     credentials.avatar_img = file;
   } else {
-    credentials.avatar_str = avatar ? avatar : "https://bit.ly/2GlN9TU";
+    credentials.avatar = avatar ? avatar : "https://bit.ly/2GlN9TU";
   }
   req.credentials = { ...credentials };
   next();
