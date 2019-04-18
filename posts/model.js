@@ -5,7 +5,8 @@ module.exports = {
   getAll,
   update,
   remove,
-  insert
+  insert,
+  getPostsUserID
 };
 
 function getBy(filter) {
@@ -51,4 +52,12 @@ function remove(id) {
 async function insert(post) {
   const [id] = await db("posts").insert(post, "id");
   return getBy({ id }).first();
+}
+
+function getPostsUserID(pid) {
+  return db
+    .select("user_id as ownerID")
+    .from("posts")
+    .where({ id: pid })
+    .first();
 }
