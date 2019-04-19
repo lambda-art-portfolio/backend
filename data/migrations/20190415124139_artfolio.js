@@ -10,7 +10,7 @@ exports.up = function(knex) {
 
       tbl.string("password", 128).notNullable();
 
-      tbl.string("avatar_str");
+      tbl.string("avatar");
 
       tbl.json("avatar_img");
     })
