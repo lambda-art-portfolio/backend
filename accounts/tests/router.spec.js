@@ -17,7 +17,9 @@ describe("Account Creation", () => {
       expect(res.type).toBe("application/json");
       expect(res.body.username).toBe("test");
       expect(res.body.id).toBe(1);
-      expect(res.body.avatar).toBe("https://bit.ly/2GlN9TU");
+      expect(res.body.avatar).toBe(
+        "http://greenwings.co/wp-content/uploads/2018/09/blank-head-profile-pic-for-a-man.jpg"
+      );
       expect(res.body.token).toBeDefined();
     });
 
@@ -49,22 +51,22 @@ describe("Account Creation", () => {
     beforeEach(async () => {
       await db("accounts").truncate();
       const endpoint = "/api/account/register";
-      const account = { username: "test", password: "asdf" };
-
+      const newAccount = { username: "test", password: "asdf" };
       const login = await request(server)
         .post(endpoint)
-        .send(account);
+        .send(newAccount);
 
       token = login.body.token;
       console.log("ID", login.body.id);
     });
-    it.only("should return 200 & the updated object on put", async () => {
-      console.log(token);
+    it("should return 200 & the updated object on put", async () => {
       const endpoint = "/api/account/edit/1";
       const account = { token, avatar: "updated" };
+      console.log(endpoint, account);
       const updated = await request(server)
         .put(endpoint)
         .send(account);
+      console.log("TEST");
       expect(updated.body.avatar).toBe("updated");
     });
   });

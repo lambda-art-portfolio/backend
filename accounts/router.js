@@ -45,7 +45,7 @@ router.put(
     try {
       const newAccObj = await Accounts.update(id, updated);
       delete newAccObj.password;
-      res.status(200).json(updated);
+      res.status(200).json(newAccObj);
     } catch (err) {
       console.log(err);
       res
